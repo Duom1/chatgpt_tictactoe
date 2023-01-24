@@ -21,9 +21,6 @@ font = pygame.font.Font(None, 100)
 # Initialize board
 board = [[' ' for _ in range(3)] for _ in range(3)]
 
-# Initialize player
-player = 'X'
-
 def check_winner():
     # check rows
     for row in board:
@@ -113,6 +110,10 @@ def check_player_edge(player):
             return (row,col)
     return None
 
+# Initialize player
+player = 'X'
+first_move = True
+
 # Run the game loop
 running = True
 while running:
@@ -129,12 +130,21 @@ while running:
             if board[row][col] == ' ':
                 # Make a move
                 board[row][col] = player
-                # Switch player
-                player = 'X' if player == 'O' else 'O'
+                if first_move:
+                    corners = [(0,0), (0,2), (2,0), (2,2)]
+                    if (row,col) in corners:
+                        board[1][1] = 'O'
+                        player = 'X'
+                        first_move = False
+                    else:
+                        player = 'O'
+                        first_move = False
+                else:
+                    player = 'X' if player == 'O' else 'O'
                 #Check for winner
                 if check_gameover():
                     running = False
-    if player == 'O':
+    if player == 'O' and not first_move:
         move = check_player_win('O')
         if move == None:
             move = check_player_block('X')
