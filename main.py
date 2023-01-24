@@ -90,4 +90,4 @@ while running:
     # Update the screen
     pygame.display.flip()
 
-    pygame
+pygame.quit()
